@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silicon Nexus | Circuits & Code - Where Engineers Build Together</title>
+<meta name="description" content="Silicon Nexus | Circuits & Code is a community and GitHub organization for engineers to collaborate on projects, share ideas and resources, write code, design circuits, and study together. Nexus Study Lab is one of the tools we've built along the way.">
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://quietplace.space/">
+
+<!-- Theme color (browser UI / mobile address bar) -->
+<meta name="theme-color" content="#0D0E18">
+
+<!-- Open Graph (Discord, Facebook, LinkedIn previews) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Silicon Nexus | Circuits & Code — Where Engineers Build Together">
+<meta property="og:description" content="A community and GitHub organization for engineers to collaborate on projects, share ideas and resources, write code, design circuits, and study together. Nexus Study Lab is one of the tools we've built along the way.">
+<meta property="og:image" content="https://quietplace.space/og-image.png">
+<meta property="og:url" content="https://quietplace.space/">
+<meta property="og:site_name" content="Silicon Nexus | Circuits & Code">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Silicon Nexus | Circuits & Code — Where Engineers Build Together">
+<meta name="twitter:description" content="A community and GitHub organization for engineers to collaborate on projects, share ideas and resources, write code, design circuits, and study together.">
+<meta name="twitter:image" content="https://quietplace.space/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg: #0D0E18;
+    --surface: #15162A;
+    --ink: #F1F0EC;
+    --ink-soft: #A8AAC2;
+    --ink-faint: #6E7090;
+    --line: #262842;
+    --accent: #8A90FF;
+    --accent-ink: #ABB0FF;
+    --accent-soft: rgba(138,144,255,0.14);
+    --accent-soft-2: #10111E;
+    --dark-bg: #07080E;
+    --dark-surface: #101126;
+    --dark-line: #20223D;
+    --dark-text: var(--ink);
+    --dark-text-soft: var(--ink-soft);
+    --dark-accent: #9CA1FF;
+    --radius-lg: 24px;
+    --radius-md: 18px;
+    --radius-sm: 12px;
+    --shadow-soft: 0 1px 0 rgba(255,255,255,0.05) inset, 0 14px 32px -18px rgba(0,0,0,0.65);
+    --shadow-pop: 0 1px 0 rgba(255,255,255,0.06) inset, 0 26px 50px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(138,144,255,0.12);
+    --ease: cubic-bezier(.22,.7,.2,1);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  ul{ list-style:none; }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+
+  em{ font-style:italic; color:var(--accent); }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:18px;
+  }
+
+  /* ---- focus ring signature mark ---- */
+  .ring{
+    width:16px; height:16px;
+    border-radius:50%;
+    border:2px solid currentColor;
+    border-top-color:transparent;
+    flex-shrink:0;
+  }
+  .ring.spin{ animation:spin 6s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .section-head{
+    max-width:620px;
+    margin-bottom:56px;
+  }
+  .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+  .section-head h2{ font-size:clamp(30px,4vw,42px); line-height:1.15; margin-bottom:14px; }
+  .section-head p{ color:var(--ink-soft); font-size:17px; }
+
+  section{ padding:120px 0; }
+  @media (max-width:768px){ section{ padding:84px 0; } }
+
+  /* reveal on scroll */
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* ============ NAV ============ */
+  .nav-shell{
+    position:fixed; top:18px; left:0; right:0;
+    display:flex; justify-content:center;
+    z-index:200;
+    padding:0 20px;
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 8px 8px 18px;
+    border-radius:100px;
+    background:rgba(21,22,42,0.55);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,0.08);
+    transition:background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .nav.scrolled{
+    background:rgba(15,16,30,0.86);
+    border-color:var(--line);
+    box-shadow:var(--shadow-soft);
+  }
+  .nav-logo{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Fraunces',serif; font-weight:500; font-size:15.5px;
+    color:var(--ink); margin-right:6px;
+    white-space:nowrap;
+  }
+  .nav-logo .ring{ color:var(--accent); }
+  .nav-links{ display:flex; align-items:center; gap:2px; }
+  .nav-links a{
+    font-size:14px; font-weight:500; color:var(--ink-soft);
+    padding:9px 14px; border-radius:100px;
+    transition:color .2s, background .2s;
+    white-space:nowrap;
+  }
+  .nav-links a:hover{ color:var(--ink); background:rgba(255,255,255,0.07); }
+  .nav-cta{
+    display:flex; align-items:center; gap:8px;
+    margin-left:4px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-size:14.5px; font-weight:600;
+    padding:11px 22px;
+    border-radius:100px;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), color .25s;
+  }
+  .btn:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--accent); color:#fff; box-shadow:0 1px 1px rgba(0,0,0,0.04), 0 10px 24px -10px rgba(65,71,213,0.55); }
+  .btn-primary:hover{ background:var(--accent-ink); box-shadow:0 1px 1px rgba(0,0,0,0.04), 0 14px 28px -10px rgba(65,71,213,0.6); }
+  .btn-ghost{ background:rgba(255,255,255,0.08); color:var(--ink); }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.15); }
+  .btn-outline{ background:transparent; color:var(--ink); border:1.5px solid var(--line); }
+  .btn-outline:hover{ border-color:var(--ink-faint); }
+  .btn-sm{ padding:8px 16px; font-size:13.5px; }
+  .nav-toggle{
+    display:none; width:38px; height:38px; border-radius:50%;
+    align-items:center; justify-content:center; background:rgba(255,255,255,0.08);
+  }
+  .nav-toggle span{ display:block; width:16px; height:1.5px; background:var(--ink); position:relative; }
+  .nav-toggle span::before,.nav-toggle span::after{ content:''; position:absolute; left:0; width:16px; height:1.5px; background:var(--ink); transition:.25s; }
+  .nav-toggle span::before{ top:-5px; } .nav-toggle span::after{ top:5px; }
+
+  .mobile-panel{
+    position:fixed; inset:0; z-index:190;
+    background:var(--bg);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    transform:translateY(-100%); transition:transform .4s var(--ease);
+  }
+  .mobile-panel.open{ transform:translateY(0); }
+  .mobile-panel a{ font-family:'Fraunces',serif; font-size:26px; padding:14px; color:var(--ink); }
+  .mobile-close{ position:absolute; top:24px; right:28px; width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:22px; }
+
+  @media (max-width:880px){
+    .nav-links, .nav-cta .btn-ghost{ display:none; }
+    .nav-toggle{ display:flex; }
+    .nav{ padding:8px 8px 8px 16px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    isolation:isolate;
+  }
+  .hero-media{ position:absolute; inset:0; z-index:0; background:#cfd2d8; }
+  .hero-media img, .hero-media video{
+    width:100%; height:100%; object-fit:cover;
+  }
+  /* fallback gradient shown until real media file is dropped in */
+  .hero-media.hero-fallback{
+    background:
+      radial-gradient(circle at 20% 18%, rgba(255,255,255,0.07), transparent 45%),
+      linear-gradient(155deg, #1B1D33 0%, #14152A 30%, #2A2F5C 58%, #4147D5 84%, #0B0C16 100%);
+  }
+  .hero-media.hero-fallback::after{
+    content:'';
+    position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1.4px);
+    background-size:3px 3px;
+    opacity:0.4;
+  }
+  .hero-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(10,11,20,0.32) 0%, rgba(10,11,20,0.12) 38%, rgba(10,11,20,0.42) 100%);
+  }
+  .hero-inner{
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding:0 28px; max-width:760px;
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:600; color:#fff;
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.28);
+    backdrop-filter:blur(8px);
+    padding:8px 18px; border-radius:100px;
+    margin-bottom:26px;
+    animation:fadeUp .8s var(--ease) both;
+  }
+  .hero h1{
+    color:#fff;
+    font-size:clamp(40px,6.2vw,76px);
+    line-height:1.08;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    text-shadow:0 2px 24px rgba(0,0,0,0.18);
+    animation:fadeUp .8s .08s var(--ease) both;
+  }
+  .hero p.sub{
+    color:rgba(255,255,255,0.86);
+    font-size:18px;
+    max-width:560px;
+    margin:22px 0 36px;
+    animation:fadeUp .8s .16s var(--ease) both;
+  }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; animation:fadeUp .8s .24s var(--ease) both; }
+  .hero .btn-primary{ padding:14px 28px; font-size:15.5px; }
+  .hero .btn-glass{
+    background:rgba(255,255,255,0.14); color:#fff;
+    border:1px solid rgba(255,255,255,0.32);
+    backdrop-filter:blur(8px);
+    padding:14px 26px; font-size:15.5px;
+  }
+  .hero .btn-glass:hover{ background:rgba(255,255,255,0.22); }
+
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  .scroll-cue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    z-index:2; display:flex; flex-direction:column; align-items:center; gap:10px;
+    color:rgba(255,255,255,0.78); font-size:11.5px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+  }
+  .scroll-cue .ring-wrap{
+    width:30px; height:30px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.4);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .scroll-cue .dot{ width:4px; height:4px; border-radius:50%; background:#fff; animation:scrollDot 1.8s ease-in-out infinite; }
+  @keyframes scrollDot{ 0%,100%{ transform:translateY(-5px); opacity:.4; } 50%{ transform:translateY(5px); opacity:1; } }
+
+  /* ============ FEATURES ============ */
+  .features-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  @media (max-width:980px){ .features-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .features-grid{ grid-template-columns:1fr; } }
+
+  .feature-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:30px 26px;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s;
+  }
+  .feature-card:hover{ transform:translateY(-5px); box-shadow:var(--shadow-pop); border-color:transparent; }
+  .feature-icon{
+    width:44px; height:44px; border-radius:13px;
+    background:var(--accent-soft);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--accent);
+    margin-bottom:18px;
+  }
+  .feature-card h3{ font-size:17.5px; font-weight:600; font-family:'Inter',sans-serif; margin-bottom:8px; color:var(--ink); }
+  .feature-card p{ font-size:14.5px; color:var(--ink-soft); line-height:1.55; }
+
+  /* ============ SHOWCASE ============ */
+  .showcase{ background:var(--accent-soft-2); }
+  .showcase-stage{
+    position:relative;
+    display:flex; justify-content:center; align-items:center;
+    margin-top:8px;
+  }
+  .device{
+    position:relative;
+    width:min(880px,92vw);
+    border-radius:20px;
+    background:linear-gradient(180deg,#1d1e2b,#101019);
+    border:1px solid var(--line);
+    padding:14px 14px 30px;
+    box-shadow:0 30px 70px -30px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .device-bar{ display:flex; gap:6px; padding:4px 8px 14px; }
+  .device-bar span{ width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,0.18); }
+  .device-screen{
+    border-radius:10px; overflow:hidden;
+    aspect-ratio:16/9;
+    position:relative;
+  }
+  .screen-slide{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:10px; text-align:center; padding:30px;
+    opacity:0; transition:opacity .5s var(--ease);
+    color:#fff;
+    overflow:hidden;
+  }
+  .screen-slide.active{ opacity:1; }
+  .screen-slide img{
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%; object-fit:contain;
+    background:var(--bg);
+  }
+  .screen-slide::before{
+    content:'';
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(10,11,20,0.25) 0%, rgba(10,11,20,0.65) 100%);
+  }
+  .screen-slide .tag, .screen-slide h4, .screen-slide p{ position:relative; z-index:2; }
+  .screen-slide .tag{ font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.65); font-weight:600; }
+  .screen-slide h4{ font-family:'Fraunces',serif; font-weight:500; font-size:26px; color:#fff; }
+  .screen-slide p{ font-size:13.5px; color:rgba(255,255,255,0.7); max-width:360px; }
+  .slide-1{ background:linear-gradient(135deg,#3B3F77,#4147D5); }
+  .slide-2{ background:linear-gradient(135deg,#2B2E45,#5057E8); }
+  .slide-3{ background:linear-gradient(135deg,#1F2138,#383C66); }
+  .slide-4{ background:linear-gradient(135deg,#262A52,#6F76FF); }
+
+  .showcase-controls{
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    margin-top:26px;
+  }
+  .show-arrow{
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid var(--line); background:var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s, border-color .2s;
+  }
+  .show-arrow:hover{ background:var(--accent-soft); border-color:transparent; }
+  .show-dots{ display:flex; gap:8px; }
+  .show-dots button{ width:7px; height:7px; border-radius:50%; background:var(--line); transition:background .2s, width .25s; }
+  .show-dots button.active{ background:var(--accent); width:20px; border-radius:4px; }
+  .showcase-caption{ text-align:center; color:var(--ink-soft); font-size:13.5px; margin-top:14px; }
+
+  /* ============ WHY ============ */
+  .why{ display:grid; grid-template-columns:1fr 1.05fr; gap:64px; align-items:start; }
+  @media (max-width:860px){ .why{ grid-template-columns:1fr; gap:40px; } }
+  .problem-list{ display:flex; flex-direction:column; gap:2px; }
+  .problem-item{
+    display:flex; align-items:center; gap:16px;
+    padding:18px 4px; border-bottom:1px solid var(--line);
+  }
+  .problem-item:first-child{ border-top:1px solid var(--line); }
+  .problem-item .ring{ width:9px; height:9px; border-width:1.5px; color:var(--ink-faint); }
+  .problem-item span{ font-size:16px; color:var(--ink); font-weight:500; }
+  .why-copy h2{ font-size:clamp(28px,3.6vw,38px); line-height:1.18; margin-bottom:18px; }
+  .why-copy p{ color:var(--ink-soft); font-size:16.5px; line-height:1.7; margin-bottom:16px; }
+
+  /* ============ COMMUNITY (dark) ============ */
+  .community{
+    background:var(--dark-bg); color:var(--dark-text);
+    position:relative; overflow:hidden;
+  }
+  .community::before{
+    content:'';
+    position:absolute; top:-180px; left:50%; transform:translateX(-50%);
+    width:700px; height:700px; border-radius:50%;
+    background:radial-gradient(circle, rgba(138,144,255,0.18), transparent 70%);
+    pointer-events:none;
+  }
+  .community .wrap{ position:relative; z-index:1; }
+  .community .section-head h2{ color:var(--dark-text); }
+  .community .section-head p{ color:var(--dark-text-soft); }
+  .community .eyebrow{ color:var(--dark-accent); }
+  .comm-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--dark-line); border:1px solid var(--dark-line);
+    border-radius:var(--radius-md); overflow:hidden;
+    margin-bottom:44px;
+  }
+  @media (max-width:760px){ .comm-grid{ grid-template-columns:repeat(2,1fr); } }
+  .comm-item{
+    background:var(--dark-surface);
+    padding:28px 22px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .comm-item .ring{ color:var(--dark-accent); }
+  .comm-item span{ font-size:15px; font-weight:500; color:var(--dark-text); }
+  .comm-cta{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .btn-discord{
+    background:var(--dark-accent); color:#11122A;
+    padding:16px 32px; font-size:16px;
+    box-shadow:0 16px 36px -14px rgba(138,144,255,0.5);
+  }
+  .btn-discord:hover{ background:#A0A5FF; }
+  .btn-app-outline{
+    background:transparent; color:var(--dark-text);
+    border:1.5px solid var(--dark-line);
+    padding:16px 30px; font-size:16px;
+  }
+  .btn-app-outline:hover{ border-color:var(--dark-accent); color:var(--dark-accent); }
+  .comm-caption{ text-align:center; color:var(--dark-text-soft); font-size:13.5px; margin-top:18px; }
+
+  /* ============ ROADMAP ============ */
+  .roadmap-line{ position:relative; padding-left:32px; }
+  .roadmap-line::before{
+    content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1.5px;
+    background:var(--line);
+  }
+  .road-group{ margin-bottom:48px; position:relative; }
+  .road-group:last-child{ margin-bottom:0; }
+  .road-group::before{
+    content:''; position:absolute; left:-32px; top:4px; width:11px; height:11px; border-radius:50%;
+    background:var(--surface); border:2px solid var(--accent);
+  }
+  .road-group.is-done::before{ background:var(--accent); }
+  .road-group.is-future::before{ border-color:var(--ink-faint); }
+  .road-status{
+    font-size:12.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:14px; display:block;
+  }
+  .road-group.is-future .road-status{ color:var(--ink-faint); }
+  .road-items{ display:flex; flex-direction:column; gap:14px; }
+  .road-row{
+    display:flex; align-items:baseline; gap:14px;
+    padding:16px 20px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
+  }
+  .road-row h4{ font-family:'Inter',sans-serif; font-size:15.5px; font-weight:600; color:var(--ink); }
+  .road-row p{ font-size:13.5px; color:var(--ink-soft); }
+  .road-group.is-future .road-row{ opacity:0.7; border-style:dashed; }
+
+  /* ============ FAQ ============ */
+  .faq-list{ max-width:740px; margin:0 auto; }
+  .faq-item{ border-bottom:1px solid var(--line); }
+  .faq-item:first-child{ border-top:1px solid var(--line); }
+  .faq-q{
+    width:100%; display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding:24px 4px; text-align:left;
+  }
+  .faq-q span{ font-size:16.5px; font-weight:600; color:var(--ink); }
+  .faq-q .plus{
+    width:26px; height:26px; flex-shrink:0; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; position:relative; transition:transform .3s var(--ease), background .2s;
+  }
+  .faq-q .plus::before,.faq-q .plus::after{ content:''; position:absolute; background:var(--ink-soft); transition:transform .3s var(--ease); }
+  .faq-q .plus::before{ width:10px; height:1.4px; }
+  .faq-q .plus::after{ width:1.4px; height:10px; }
+  .faq-item.open .faq-q .plus{ background:var(--accent-soft); }
+  .faq-item.open .faq-q .plus::after{ transform:scaleY(0); }
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .4s var(--ease); }
+  .faq-a-inner{ padding:0 4px 26px; max-width:600px; color:var(--ink-soft); font-size:15px; line-height:1.65; }
+
+  /* ============ FOOTER ============ */
+  footer{ background:var(--surface); border-top:1px solid var(--line); padding:72px 0 36px; }
+  .foot-top{ display:flex; justify-content:space-between; gap:50px; flex-wrap:wrap; margin-bottom:56px; }
+  .foot-brand{ max-width:300px; }
+  .foot-brand .nav-logo{ margin-bottom:14px; }
+  .foot-brand p{ color:var(--ink-soft); font-size:14.5px; line-height:1.6; }
+  .foot-cols{ display:flex; gap:56px; flex-wrap:wrap; }
+  .foot-col h5{ font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-bottom:16px; }
+  .foot-col a{ display:block; font-size:14.5px; color:var(--ink-soft); margin-bottom:11px; transition:color .2s; }
+  .foot-col a:hover{ color:var(--ink); }
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+    padding-top:28px; border-top:1px solid var(--line);
+    font-size:13px; color:var(--ink-faint);
+  }
+  .foot-socials{ display:flex; gap:16px; }
+  .foot-socials a{ color:var(--ink-faint); }
+  .foot-socials a:hover{ color:var(--accent); }
+</style>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <div class="nav-shell">
+    <nav class="nav" id="mainNav">
+      <a href="#home" class="nav-logo"><span class="ring"></span>Silicon Nexus</a>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#showcase">Screenshots</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#community">Community</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#community" class="btn btn-ghost btn-sm">Discord</a>
+        <a href="https://github.com/silicon-nexus-study-lab" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub</a>
+        <a href="#home" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span></button>
+    </nav>
+  </div>
+
+  <div class="mobile-panel" id="mobilePanel">
+    <button class="mobile-close" id="mobileClose" aria-label="Close menu">&times;</button>
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+    <a href="#showcase">Screenshots</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#community">Community</a>
+    <a href="#faq">FAQ</a>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="home">
+    <div class="hero-media hero-fallback" id="heroMedia">
+      <!-- Replace this block with your own background: -->
+           <img src="download.jpg" alt="" style="width:100%;height:100%;object-fit:cover">
+           
+           <!-- <video autoplay muted loop playsinline><source src="hero-bg.webm" type="video/webm"></video> -->
+           
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <span class="hero-badge">⚡ A community for engineers, by engineers</span>
+      <h1>Build together. <em>Engineer</em> together.</h1>
+      <p class="sub">Silicon Nexus | Circuits & Code is a community and open-source organization where engineers collaborate on projects, trade ideas, share resources, write code, design circuits, and study side by side. Nexus Study Lab - our focus timer - is one of the things we've built along the way.</p>
+      <div class="hero-actions">
+        <a href="#features" class="btn btn-primary">See What We Build</a>
+        <a href="#community" class="btn btn-glass">Join Discord</a>
+      </div>
+    </div>
+    <div class="scroll-cue">
+      <div class="ring-wrap"><span class="dot"></span></div>
+      Scroll
+    </div>
+  </header>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow"><span class="ring"></span>Project Spotlight</span>
+        <h2>Nexus Study Lab - one of our projects</h2>
+        <p>Alongside circuits, code, and shared resources, the community also ships its own tools. This is our focus & study app, built in the open.</p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+          </div>
+          <h3>Pomodoro Timer</h3>
+          <p>Work in focused sprints with gentle breaks built in, so momentum never turns into burnout.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V10M12 19V5M20 19v-7"/></svg>
+          </div>
+          <h3>Study Analytics</h3>
+          <p>See exactly where your time goes, and notice the patterns that quietly shape your habits.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l8 4-8 4"/></svg>
+          </div>
+          <h3>Focus Music</h3>
+          <p>Ambient soundscapes tuned for concentration, with nothing jarring to pull you out of flow.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+          </div>
+          <h3>Study Rooms</h3>
+          <p>Drop into a shared room with people working quietly alongside you - accountability without pressure.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+          </div>
+          <h3>AI Assistant</h3>
+          <p>Ask a question, summarize a chapter, or untangle a problem - without leaving your workspace.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Task Management</h3>
+          <p>Plan your week, break it into sessions, and check things off as you actually finish them.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3 2.5-5 7-5s7 2 7 5"/><path d="M16 14c2.7.3 4 1.7 4 4"/></svg>
+          </div>
+          <h3>Community Challenges</h3>
+          <p>Join seasonal study challenges built around streaks, not leaderboards or pressure to win.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l5-5 4 4 9-9"/><path d="M21 7v6"/></svg>
+          </div>
+          <h3>Progress Tracking</h3>
+          <p>Watch your streaks and focus hours build up gradually - proof that consistency is working.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SHOWCASE ============ -->
+  <section id="showcase" class="showcase">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow"><span class="ring"></span>Inside Nexus Study Lab</span>
+        <h2>A workspace that gets out of your way</h2>
+        <p>A look at the core workflows of Nexus Study Lab - timer sessions, study rooms, and the analytics that quietly track your progress.</p>
+      </div>
+
+      <div class="showcase-stage reveal">
+        <div class="device">
+          <div class="device-bar"><span></span><span></span><span></span></div>
+          <div class="device-screen" id="screenStage">
+            <div class="screen-slide slide-1 active" data-slide="0">
+              <img src="screenshots/focus-session.png" alt="Focus session screenshot" onerror="this.remove()">
+              <span class="tag">Focus session</span>
+              <h4>One session, no distractions</h4>
+              <p>A single timer, a single task - everything else fades into the background.</p>
+            </div>
+            <div class="screen-slide slide-2" data-slide="1">
+              <img src="screenshots/study-rooms.png" alt="Study rooms screenshot" onerror="this.remove()">
+              <span class="tag">Study rooms</span>
+              <h4>Quietly work alongside others</h4>
+              <p>Join a shared room and study in parallel, with light presence instead of pressure.</p>
+            </div>
+            <div class="screen-slide slide-3" data-slide="2">
+              <img src="screenshots/analytics.png" alt="Analytics screenshot" onerror="this.remove()">
+              <span class="tag">Analytics</span>
+              <h4>Your habits, made visible</h4>
+              <p>Weekly focus hours and streaks, laid out simply enough to actually act on.</p>
+            </div>
+            <div class="screen-slide slide-4" data-slide="3">
+              <img src="screenshots/ai-assistant.png" alt="AI assistant screenshot" onerror="this.remove()">
+              <span class="tag">AI assistant</span>
+              <h4>Help, right where you're working</h4>
+              <p>Ask a question about your material without breaking your study session.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-controls reveal">
+        <button class="show-arrow" id="prevSlide" aria-label="Previous screenshot">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="show-dots" id="showDots"></div>
+        <button class="show-arrow" id="nextSlide" aria-label="Next screenshot">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+      <p class="showcase-caption reveal">Focus session · Study rooms · Analytics · AI assistant</p>
+    </div>
+  </section>
+
+  <!-- ============ WHY ============ -->
+  <section id="why">
+    <div class="wrap why">
+      <div class="problem-list reveal">
+        <div class="problem-item"><span class="ring"></span><span>Working in isolation</span></div>
+        <div class="problem-item"><span class="ring"></span><span>Ideas with nowhere to go</span></div>
+        <div class="problem-item"><span class="ring"></span><span>Scattered resources</span></div>
+        <div class="problem-item"><span class="ring"></span><span>No one to review your work</span></div>
+        <div class="problem-item"><span class="ring"></span><span>Motivation that fades alone</span></div>
+      </div>
+      <div class="why-copy reveal">
+        <span class="eyebrow"><span class="ring"></span>Why Silicon Nexus</span>
+        <h2>A place engineers actually wanted to exist</h2>
+        <p>Most engineering work happens alone - a circuit in Cadence, a repo nobody else sees, a question with no one around to answer it. Silicon Nexus | Circuits & Code exists to change that.</p>
+        <p>It's a Discord server and GitHub organization where engineers collaborate on real projects, share ideas and resources, review each other's work, and study side by side - whether that's writing code, designing circuits, or just staying consistent.</p>
+        <p>Nexus Study Lab, the focus timer you've seen throughout this page, is one small piece of that - built by the community, for the community.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMMUNITY ============ -->
+  <section id="community" class="community">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow"><span class="ring"></span>Community</span>
+        <h2>You don't have to build alone</h2>
+        <p><strong>Silicon Nexus | Circuits &amp; Code</strong> is a Discord server and GitHub organization for engineers to collaborate on projects, share ideas and resources, write code, and design circuits together - with Nexus Study Lab as one of the tools we've built along the way.</p>
+      </div>
+      <div class="comm-grid reveal">
+        <div class="comm-item"><span class="ring"></span><span>Collaborate on projects</span></div>
+        <div class="comm-item"><span class="ring"></span><span>Share ideas &amp; resources</span></div>
+        <div class="comm-item"><span class="ring"></span><span>Review code together</span></div>
+        <div class="comm-item"><span class="ring"></span><span>Design circuits in Cadence</span></div>
+        <div class="comm-item"><span class="ring"></span><span>Study &amp; work in parallel</span></div>
+        <div class="comm-item"><span class="ring"></span><span>Stay accountable</span></div>
+      </div>
+      <div class="comm-cta reveal">
+        <a href="https://discord.gg/SNhzuKCvhw" class="btn btn-discord">Join Silicon Nexus →</a>
+        <a href="https://quietplace.space/app.html" class="btn btn-app-outline" target="_blank" rel="noopener">Open the Study App ↗</a>
+      </div>
+      <p class="comm-caption reveal">Also runs as a Discord Activity inside the Silicon Nexus server - same timer, right in your voice channel.</p>
+    </div>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section id="roadmap">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow"><span class="ring"></span>Roadmap</span>
+        <h2>Built gradually, in the open</h2>
+        <p>Silicon Nexus keeps growing in public - here's where things stand right now.</p>
+      </div>
+
+      <div class="roadmap-line reveal" style="max-width:700px;margin:0 auto;">
+        <div class="road-group is-done">
+          <span class="road-status">Completed</span>
+          <div class="road-items">
+            <div class="road-row"><h4>Pomodoro Timer</h4><p>- core session flow</p></div>
+            <div class="road-row"><h4>Study Analytics</h4><p>- weekly focus breakdown</p></div>
+            <div class="road-row"><h4>Discord &amp; GitHub org launch</h4></div>
+          </div>
+        </div>
+        <div class="road-group">
+          <span class="road-status">Current development</span>
+          <div class="road-items">
+            <div class="road-row"><h4>Study Rooms</h4><p>- shared live sessions</p></div>
+            <div class="road-row"><h4>AI Assistant</h4><p>—-in-app study help</p></div>
+          </div>
+        </div>
+        <div class="road-group is-future">
+          <span class="road-status">Coming soon</span>
+          <div class="road-items">
+            <div class="road-row"><h4>Community Challenges</h4></div>
+            <div class="road-row"><h4>Mobile companion app</h4></div>
+            <div class="road-row"><h4>Focus Music library</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow"><span class="ring"></span>FAQ</span>
+        <h2>Good to know</h2>
+      </div>
+      <div class="faq-list reveal">
+
+        <div class="faq-item">
+          <button class="faq-q"><span>Is Nexus Study Lab free to use?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Yes - the core timer, analytics, and community access are free. Optional upgrades exist for advanced AI usage and extended study room features.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q"><span>Do I need an account to get started?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">You can start a quick session without signing up. Creating a free account simply lets your streaks, analytics, and settings carry over between devices.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q"><span>Can I use Nexus Study Lab on my phone?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">The web app is fully responsive today, and a dedicated mobile companion app is on the roadmap.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q"><span>How is this different from other study timers?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Most timers stand alone. Nexus Study Lab is backed by Silicon Nexus | Circuits &amp; Code - a community of engineers collaborating on real projects - so consistency comes from the people around you, not willpower alone.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q"><span>Is the Discord community open to everyone?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Yes - Silicon Nexus | Circuits &amp; Code welcomes engineers and students at any level, whether you're here to collaborate on projects, share resources, design circuits, write code, or just study.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q"><span>How can I suggest a new feature?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Feature requests and feedback channels live right inside the Discord - it's the fastest way to shape what gets built next.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q"><span>Where's the source code?</span><span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Nexus Study Lab and its related projects are built in the open under the Silicon Nexus | Circuits &amp; Code GitHub organization.</div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <a href="#home" class="nav-logo"><span class="ring"></span>Silicon Nexus</a>
+          <p>A community and GitHub organization for engineers to collaborate on projects, share ideas and resources, write code, design circuits, and grow together. Nexus Study Lab is one of the tools we've built along the way.</p>
+        </div>
+        <div class="foot-cols">
+          <div class="foot-col">
+            <h5>Nexus Study Lab</h5>
+            <a href="#features">Features</a>
+            <a href="#showcase">Screenshots</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="https://quietplace.space/app.html" target="_blank" rel="noopener">Open Study App ↗</a>
+          </div>
+          <div class="foot-col">
+            <h5>Community</h5>
+            <a href="#community">Discord</a>
+            <a href="https://github.com/silicon-nexus-study-lab" target="_blank" rel="noopener">GitHub</a>
+            <a href="#" onclick="event.preventDefault(); alert('Instagram - coming soon!');">Instagram</a>
+          </div>
+          <div class="foot-col">
+            <h5>Legal</h5>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="mailto:xyz@gmail.com">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Silicon Nexus | Circuits &amp; Code. Nexus Study Lab is one of our projects.</span>
+        <div class="foot-socials">
+          <a href="https://github.com/silicon-nexus-study-lab" target="_blank" rel="noopener" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.5 2.87 8.3 6.84 9.65.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.51-3.5-.68-3.72-1.31-.13-.33-.68-1.35-1.16-1.63-.4-.22-.97-.75-.01-.76.9-.02 1.54.84 1.76 1.19 1.03 1.74 2.68 1.25 3.33.95.1-.75.4-1.25.73-1.54-2.55-.29-5.21-1.28-5.21-5.68 0-1.25.44-2.28 1.17-3.08-.12-.29-.51-1.47.11-3.06 0 0 .96-.31 3.14 1.18.91-.26 1.88-.39 2.85-.39.97 0 1.94.13 2.85.39 2.18-1.49 3.14-1.18 3.14-1.18.62 1.59.23 2.77.11 3.06.73.8 1.17 1.82 1.17 3.08 0 4.41-2.67 5.39-5.22 5.67.41.36.77 1.07.77 2.16 0 1.56-.01 2.81-.01 3.2 0 .27.18.6.69.49C19.13 20.55 22 16.74 22 12.25 22 6.58 17.52 2 12 2Z"/></svg></a>
+          <a href="#" aria-label="Instagram" onclick="event.preventDefault(); alert('Instagram - coming soon!');"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.4" cy="6.6" r="1"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  // ---- nav scroll state ----
+  const nav = document.getElementById('mainNav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // ---- mobile panel ----
+  const panel = document.getElementById('mobilePanel');
+  document.getElementById('navToggle').addEventListener('click', () => panel.classList.add('open'));
+  document.getElementById('mobileClose').addEventListener('click', () => panel.classList.remove('open'));
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => panel.classList.remove('open')));
+
+  // ---- scroll reveal ----
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // ---- showcase carousel ----
+  const slides = Array.from(document.querySelectorAll('.screen-slide'));
+  const dotsWrap = document.getElementById('showDots');
+  let current = 0;
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    if (i === 0) d.classList.add('active');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function goTo(i){
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  document.getElementById('prevSlide').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nextSlide').addEventListener('click', () => goTo(current + 1));
+  let autoplay = setInterval(() => goTo(current + 1), 5500);
+  document.querySelector('.showcase-stage').addEventListener('mouseenter', () => clearInterval(autoplay));
+  document.querySelector('.showcase-stage').addEventListener('mouseleave', () => { autoplay = setInterval(() => goTo(current + 1), 5500); });
+
+  // ---- faq accordion ----
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(other => {
+        if (other !== item){ other.classList.remove('open'); other.querySelector('.faq-a').style.maxHeight = null; }
+      });
+      item.classList.toggle('open', !isOpen);
+      a.style.maxHeight = !isOpen ? a.scrollHeight + 'px' : null;
+    });
+  });
+})();
+</script>
+</body>
+</html>
